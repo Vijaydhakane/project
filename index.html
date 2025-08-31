@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MyStore — Your One-Stop Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --brand:#232f3e;        /* dark header */
+      --brand-accent:#febd69; /* search accent */
+      --brand-light:#37475a;  /* subnav */
+      --bg:#f3f3f3;
+      --card:#fff;
+      --text:#111;
+      --muted:#555;
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+    a { color: inherit; text-decoration: none; }
+    /* Top header */
+    .header {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--brand); color:#fff; padding: 8px 12px;
+      display: grid; grid-template-columns: 160px 1fr 340px 120px; gap: 12px; align-items: center;
+    }
+    .logo { font-weight: 800; font-size: 22px; letter-spacing: .3px; white-space: nowrap; }
+    .logo span { color: var(--brand-accent); }
+    .address { font-size: 12px; line-height: 1.2; color:#ddd; }
+    .address b { color:#fff; font-size: 13px; }
+    .search {
+      display: grid; grid-template-columns: 140px 1fr 44px; overflow: hidden; border-radius: 6px;
+      background:#fff;
+    }
+    .search select, .search input { border: none; outline: none; padding: 10px; font-size: 14px; }
+    .search select { background:#f0f0f0; border-right: 1px solid #e5e5e5; }
+    .search button {
+      border: none; background: var(--brand-accent); cursor: pointer; font-size: 18px; display:flex; align-items:center; justify-content:center;
+    }
+    .acct {
+      display:flex; gap:16px; justify-content:flex-end; align-items:center; font-size: 13px;
+    }
+    .pill { border:1px solid #fff3; padding:6px 10px; border-radius: 4px; }
+    .cart { font-size: 22px; }
+    /* Subnav */
+    .subnav { background: var(--brand-light); color:#fff; padding:8px 12px; display:flex; gap:18px; flex-wrap:wrap; font-size:14px; }
+    .subnav a { color:#fff; opacity:.9; }
+    .subnav a:hover { opacity:1; text-decoration: underline; }
+    /* Hero */
+    .hero {
+      background: url("https://images.unsplash.com/photo-1518449073235-22463c82a8bf?q=80&w=1400&auto=format&fit=crop") center/cover no-repeat;
+      height: 300px; display:flex; align-items:flex-end; justify-content:center;
+    }
+    .hero .note {
+      margin: 12px; background:#fff; padding:10px 14px; border-radius:6px; font-size:14px; box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    }
+    /* Content */
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 16px; }
+    .grid {
+      display:grid; gap:16px;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+    }
+    .card {
+      background: var(--card); border-radius:8px; padding:14px; box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .card h3 { margin:0; font-size: 16px; }
+    .price { font-weight:700; }
+    .img {
+      aspect-ratio: 16/10; background:#fafafa; border:1px solid #eee; border-radius:6px;
+      display:flex; align-items:center; justify-content:center; overflow:hidden;
+    }
+    .img img { width:100%; height:100%; object-fit: cover; }
+    .btn {
+      background:#ffd814; border:1px solid #f0c14b; border-radius: 6px; padding:8px 10px; cursor:pointer; font-weight:600; text-align:center;
+    }
+    .btn:hover { filter: brightness(0.98); }
+    .muted { color: var(--muted); font-size: 13px; }
+    /* Footer */
+    .footer { margin-top: 24px; background:#131a22; color:#ddd; }
+    .backtotop { text-align:center; padding:12px; background:#243447; color:#fff; cursor:pointer; }
+    .footgrid { max-width:1200px; margin:0 auto; display:grid; grid-template-columns: repeat(4,1fr); gap:18px; padding:26px 16px; }
+    .footer h4 { color:#fff; margin:0 0 8px 0; }
+    .footgrid a { color:#ddd; font-size: 14px; display:block; margin:6px 0; }
+    .copy { text-align:center; padding:12px; font-size: 13px; border-top:1px solid #222; }
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .header { grid-template-columns: 120px 1fr 240px 80px; }
+      .grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    }
+    @media (max-width: 800px) {
+      .header { grid-template-columns: 1fr; row-gap: 8px; }
+      .acct { justify-content: flex-start; }
+      .grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .hero { height: 220px; }
+    }
+    @media (max-width: 520px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo"><a href="#"><span>My</span>Store</a></div>
+    <div class="address">
+      Deliver to<br /><b>Mumbai 400001</b>
+    </div>
+
+    <form class="search" onsubmit="return fakeSearch(event)">
+      <select aria-label="Category">
+        <option value="all">All Categories</option>
+        <option>Electronics</option>
+        <option>Fashion</option>
+        <option>Home</option>
+        <option>Books</option>
+        <option>Grocery</option>
+      </select>
+      <input aria-label="Search" placeholder="Search MyStore..." />
+      <button title="Search">🔎</button>
+    </form>
+
+    <nav class="acct">
+      <a class="pill" href="#">Hello, Sign in<br><b>Account & Lists</b></a>
+      <a class="pill" href="#">Returns<br><b>& Orders</b></a>
+      <a class="cart" href="#" title="Cart">🛒</a>
+    </nav>
+  </header>
+
+  <!-- Sub Navigation -->
+  <div class="subnav">
+    <a href="#">All</a>
+    <a href="#">Best Sellers</a>
+    <a href="#">Mobiles</a>
+    <a href="#">Deals</a>
+    <a href="#">Fashion</a>
+    <a href="#">Electronics</a>
+    <a href="#">Home & Kitchen</a>
+    <a href="#">Books</a>
+    <a href="#">Toys</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="note">
+      You’re on <b>MyStore</b>. Shop top deals, fast delivery, and secure checkout.
+    </div>
+  </section>
+
+  <!-- Content -->
+  <main class="wrap">
+    <h2 style="margin:8px 0 12px 2px;">Today’s picks</h2>
+
+    <section class="grid">
+      <!-- Card 1 -->
+      <article class="card">
+        <h3>Wireless Headphones</h3>
+        <div class="img">
+          <img src="https://via.placeholder.com/640x400?text=Headphones" alt="Wireless Headphones">
+        </div>
+        <div class="price">₹2,999</div>
+        <div class="muted">4.3 ⭐ (2,431)</div>
+        <button class="btn">Add to Cart</button>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="card">
+        <h3>Smartphone 5G (128GB)</h3>
+        <div class="img">
+          <img src="https://via.placeholder.com/640x400?text=Smartphone" alt="Smartphone">
+        </div>
+        <div class="price">₹19,499</div>
+        <div class="muted">Bank offer available</div>
+        <button class="btn">Add to Cart</button>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card">
+        <h3>Air Fryer XL</h3>
+        <div class="img">
+          <img src="https://via.placeholder.com/640x400?text=Air+Fryer" alt="Air Fryer">
+        </div>
+        <div class="price">₹6,899</div>
+        <div class="muted">3,000+ bought in past month</div>
+        <button class="btn">Add to Cart</button>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="card">
+        <h3>Gaming Keyboard</h3>
+        <div class="img">
+          <img src="https://via.placeholder.com/640x400?text=Keyboard" alt="Keyboard">
+        </div>
+        <div class="price">₹1,799</div>
+        <div class="muted">Mechanical • RGB</div>
+        <button class="btn">Add to Cart</button>
+      </article>
+
+      <!-- Card 5 -->
+      <article class="card">
+        <h3>Cookware Set (5 pcs)</h3>
+        <div class="img">
+          <img src="https://via.placeholder.com/640x400?text=Cookware" alt="Cookware">
+        </div>
+        <div class="price">₹2,299</div>
+        <div class="muted">Non-stick • Induction safe</div>
+        <button class="btn">Add to Cart</button>
+      </article>
+
+      <!-- Card 6 -->
+      <article class="card">
+        <h3>Bluetooth Speaker</h3>
+        <div class="img">
+          <img src="https://via.placeholder.com/640x400?text=Speaker" alt="Speaker">
+        </div>
+        <div class="price">₹1,299</div>
+        <div class="muted">Water-resistant</div>
+        <button class="btn">Add to Cart</button>
+      </article>
+
+      <!-- Card 7 -->
+      <article class="card">
+        <h3>Office Chair</h3>
+        <div class="img">
+          <img src="https://via.placeholder.com/640x400?text=Chair" alt="Chair">
+        </div>
+        <div class="price">₹7,499</div>
+        <div class="muted">Ergonomic lumbar support</div>
+        <button class="btn">Add to Cart</button>
+      </article>
+
+      <!-- Card 8 -->
+      <article class="card">
+        <h3>Fiction Bestseller</h3>
+        <div class="img">
+          <img src="https://via.placeholder.com/640x400?text=Book" alt="Book">
+        </div>
+        <div class="price">₹349</div>
+        <div class="muted">Paperback • 4.6 ⭐</div>
+        <button class="btn">Add to Cart</button>
+      </article>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="backtotop" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</div>
+    <div class="footgrid">
+      <div>
+        <h4>Get to Know Us</h4>
+        <a href="#">About MyStore</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+      </div>
+      <div>
+        <h4>Connect with Us</h4>
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+        <a href="#">Instagram</a>
+      </div>
+      <div>
+        <h4>Make Money with Us</h4>
+        <a href="#">Sell on MyStore</a>
+        <a href="#">Advertise</a>
+        <a href="#">Affiliate Program</a>
+      </div>
+      <div>
+        <h4>Let Us Help You</h4>
+        <a href="#">Your Account</a>
+        <a href="#">Returns Centre</a>
+        <a href="#">Help</a>
+      </div>
+    </div>
+    <div class="copy">© <span id="y"></span> MyStore. Built for demo purposes.</div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    function fakeSearch(e){
+      e.preventDefault();
+      const q = e.target.querySelector('input').value.trim();
+      alert(q ? `Search for: ${q}` : 'Enter something to search 🙂');
+      return false;
+    }
+  </script>
+</body>
+</html>
+
